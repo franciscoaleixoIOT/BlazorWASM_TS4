@@ -24,68 +24,46 @@
 
     };
 
+
     private async Task OnNavigateAsync(NavigationContext context)
     {
-        // Url of the page that needs the lazy loaded assembly
-        
-        if (context.Path == "SBotoes")
+        if (context.Path == "sbutton")
         {
-            string sDllName = "TesteComponente1";
-            var assembly = LoadedAssemblies.Find(x => x.GetName().Name == sDllName);
-            if (assembly == null)
-            {
-                try
-                {
-                    var assemblies = await AssemblyLoader.LoadAssembliesAsync(new List<string> { sDllName + ".dll" });
-                        LoadedAssemblies.AddRange(assemblies);
-                    
-
-                }
-                catch (Exception ex1)
-                {
-                    logger.LogWarning(ex1, "Erro ao carregar testeComponente1!");
-
-                }
-            }
+            await LerDllDinamica(context.Path, "TesteComponente1");
         }
-        else 
-        if (context.Path == "Chart")
+        else
+        if (context.Path == "chart")
         {
-            string sDllName = "TesteComponente2";
-            var assembly = LoadedAssemblies.Find(x => x.GetName().Name == sDllName);
-            if (assembly == null)
-            {
-                try
-                {
-                    var assemblies = await AssemblyLoader.LoadAssembliesAsync(new List<string> { sDllName + ".dll" });
-                    LoadedAssemblies.AddRange(assemblies);
-
-                }
-                catch (Exception ex1)
-                {
-                    logger.LogWarning(ex1, "Erro ao carregar testeComponente1!");
-
-                }
-            }
+            await LerDllDinamica(context.Path, "TesteComponente2");
         }
-
+        else
         if (context.Path == "kanban")
         {
-            string sDllName = "TesteComponente3";
-            var assembly = LoadedAssemblies.Find(x => x.GetName().Name == sDllName);
-            if (assembly == null)
+            await LerDllDinamica(context.Path, "TesteComponente3");
+        }
+        else
+        if (context.Path == "diagram")
+        {
+            await LerDllDinamica(context.Path, "TesteComponente4");
+        }
+    }
+
+    private async Task LerDllDinamica(string path, string componente)
+    {
+        string sDllName = componente;
+        var assembly = LoadedAssemblies.Find(x => x.GetName().Name == sDllName);
+        if (assembly == null)
+        {
+            try
             {
-                try
-                {
-                    var assemblies = await AssemblyLoader.LoadAssembliesAsync(new List<string> { sDllName + ".dll" });
-                    LoadedAssemblies.AddRange(assemblies);
+                var assemblies = await AssemblyLoader.LoadAssembliesAsync(new List<string> { sDllName + ".dll" });
+                LoadedAssemblies.AddRange(assemblies);
 
-                }
-                catch (Exception ex1)
-                {
-                    logger.LogWarning(ex1, "Erro ao carregar testeComponente1!");
+            }
+            catch (Exception ex1)
+            {
+                logger.LogWarning(ex1, "Erro ao carregar " + componente + "!");
 
-                }
             }
         }
     }
