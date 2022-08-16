@@ -1,0 +1,93 @@
+﻿@inject LazyAssemblyLoader AssemblyLoader
+@inject ILogger<App> logger
+
+<Router AppAssembly="@typeof(App).Assembly"
+        AdditionalAssemblies="@LoadedAssemblies"
+        OnNavigateAsync="@OnNavigateAsync"
+        PreferExactMatches="@true">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p role="alert">Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+
+@code {
+    private List<Assembly> LoadedAssemblies = new List<Assembly>()
+    {
+
+    };
+
+    private async Task OnNavigateAsync(NavigationContext context)
+    {
+        // Url of the page that needs the lazy loaded assembly
+        
+        if (context.Path == "SBotoes")
+        {
+            string sDllName = "TesteComponente1";
+            var assembly = LoadedAssemblies.Find(x => x.GetName().Name == sDllName);
+            if (assembly == null)
+            {
+                try
+                {
+                    var assemblies = await AssemblyLoader.LoadAssembliesAsync(new List<string> { sDllName + ".dll" });
+                        LoadedAssemblies.AddRange(assemblies);
+                    
+
+                }
+                catch (Exception ex1)
+                {
+                    logger.LogWarning(ex1, "Erro ao carregar testeComponente1!");
+
+                }
+            }
+        }
+        else 
+        if (context.Path == "Chart")
+        {
+            string sDllName = "TesteComponente2";
+            var assembly = LoadedAssemblies.Find(x => x.GetName().Name == sDllName);
+            if (assembly == null)
+            {
+                try
+                {
+                    var assemblies = await AssemblyLoader.LoadAssembliesAsync(new List<string> { sDllName + ".dll" });
+                    LoadedAssemblies.AddRange(assemblies);
+
+                }
+                catch (Exception ex1)
+                {
+                    logger.LogWarning(ex1, "Erro ao carregar testeComponente1!");
+
+                }
+            }
+        }
+
+        if (context.Path == "kanban")
+        {
+            string sDllName = "TesteComponente3";
+            var assembly = LoadedAssemblies.Find(x => x.GetName().Name == sDllName);
+            if (assembly == null)
+            {
+                try
+                {
+                    var assemblies = await AssemblyLoader.LoadAssembliesAsync(new List<string> { sDllName + ".dll" });
+                    LoadedAssemblies.AddRange(assemblies);
+
+                }
+                catch (Exception ex1)
+                {
+                    logger.LogWarning(ex1, "Erro ao carregar testeComponente1!");
+
+                }
+            }
+        }
+    }
+}
+
